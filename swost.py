@@ -1,5 +1,5 @@
 import os
-from swost.config import SwostConfig
+from swost.swostconfig import SwostConfig
 from swost.emoncontroller import EmonController
 from swost.maincontroller import MainController
 from swost.serialbuffer import SerialBuffer
