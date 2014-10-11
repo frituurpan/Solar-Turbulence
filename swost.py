@@ -23,4 +23,7 @@ emonController = EmonController()
 
 mainController = MainController(serialParser, emonController)
 
-mainController.start()
+try:
+    mainController.start()
+except Exception:
+    mainController.shutdown()

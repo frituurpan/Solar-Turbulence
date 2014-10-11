@@ -30,9 +30,9 @@ class MainController:
         self.emonController = emon_controller
 
     def start(self):
-        self.get_serial_parser().get_serial_buffer().daemon = True
+        #self.get_serial_parser().get_serial_buffer().daemon = True
         self.get_serial_parser().get_serial_buffer().start()
-        self.get_serial_parser().daemon = True
+        #self.get_serial_parser().daemon = True
         self.get_serial_parser().start()
 
     def get_serial_parser(self):
@@ -52,3 +52,7 @@ class MainController:
         #print serial_input
         #serial_input = self.emonController.prepare_data(serial_input)
         #serial_result = self.emonController.post(serial_input)
+
+    def shutdown(self):
+        self.get_serial_parser().get_serial_buffer().join()
+        self.get_serial_parser().join()
