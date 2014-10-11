@@ -48,7 +48,7 @@ class SerialBuffer(threading.Thread):
                 self.buffer += self.ser.read(self.ser.inWaiting() or 1)  # read all char in buffer
                 while '\n' in self.buffer:  # split data line by line and store it in var
                     var, self.buffer = self.buffer.split('\n', 1)  # this is called unpacking
-                    self.queue.put(var)  # put received line in the queue
+                    self.queue.put(var.strip().strip('\x00'))  # put received line in the queue
         except SystemExit:
             self.close_serial_port()
 
