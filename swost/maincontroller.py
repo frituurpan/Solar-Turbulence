@@ -30,7 +30,9 @@ class MainController:
         self.emonController = emon_controller
 
     def start(self):
+        self.get_serial_parser().get_serial_buffer().daemon = True
         self.get_serial_parser().get_serial_buffer().start()
+        self.get_serial_parser().daemon = True
         self.get_serial_parser().start()
 
     def get_serial_parser(self):
