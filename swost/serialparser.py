@@ -1,4 +1,5 @@
 import Queue
+import copy
 import threading
 import time
 
@@ -17,33 +18,32 @@ class SerialParser(threading.Thread):
     serialData = -1
     serialBuffer = -1
 
+    queueArray = []
     completeTransmissions = []
 
     observers = []
 
     def __init__(self, serial_buffer):
+        super(SerialParser, self).__init__()
         self.serialBuffer = serial_buffer
-
-    def start(self):
-        self.get_serial_buffer().run()
-        self.run()
 
     def run(self):
         while True:
             try:
-                var = self.queue.get(False)  # try to fetch a value from queue
+                var = self.serialBuffer.queue.get(False)  # try to fetch a value from queue
             except Queue.Empty:
-                time.sleep(1)
+                #time.sleep(0.1)
                 pass  # if it is empty, do nothing
             else:
-                print(var)
-
-        # while True:
-        #     time.sleep(0.1)
-        #     if self.serialBuffer.count_queue() > 19:
-        #         self.move_queue_to_transmissions()
-        #         self.notify_observers()
-        #     pass
+                var_cpy = copy.deepcopy(var)
+                del var
+                self.queueArray.append(var_cpy)
+                for row in self.queueArray:
+                    if row == '!':
+                        self.move_queue_to_transmissions()
+                        self.notify_observers()
+                        print len(self.get_completed_transmissions())
+                        print self.get_completed_transmissions()
 
     def get_serial_buffer(self):
         """
@@ -52,12 +52,25 @@ class SerialParser(threading.Thread):
         return self.serialBuffer
 
     def move_queue_to_transmissions(self):
-        transmissions = self.serialBuffer.get_transmissions(True)
+        transmissions = self.get_transmissions()
         for transmission in transmissions:
             self.completeTransmissions.append(transmission)
 
-    def get_data(self):
+    def get_completed_transmissions(self):
         return self.completeTransmissions
+
+    def get_transmissions(self):
+        queue_array = copy.deepcopy(self.queueArray)
+        transmissions = [queue_array[:21]]
+        del self.queueArray[:21]
+        return transmissions
+
+    @staticmethod
+    def shift(key, array):
+        """
+        Shift x elements of the beginning of the array
+        """
+        return array[:+key]
 
     def register_observer(self, observer):
         self.observers.append(observer)

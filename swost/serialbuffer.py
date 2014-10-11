@@ -18,7 +18,6 @@ class SerialBuffer(threading.Thread):
 
     # storage for serial output lines
     queue = {}
-    queueArray = []
 
     #temporary storage for raw serial input
     buffer = ''
@@ -44,32 +43,25 @@ class SerialBuffer(threading.Thread):
 
     def run(self):
         self.open_serial_port()
-        while True:
-            self.buffer += self.ser.read(self.ser.inWaiting() or 1)  # read all char in buffer
-            while '\n' in self.buffer:  # split data line by line and store it in var
-                var, self.buffer = self.buffer.split('\n', 1)
-                print var
-                self.queue.put(var)  # put received line in the queue
-                self.queueArray.append(var)
-
-    def get_transmissions(self, pop=False):
-        transmissions = []
-        while len(self.queueArray) > 19:
-            transmissions.append(self.shift(20, self.queueArray))
-        return transmissions
-
-    @staticmethod
-    def shift(key, array):
-        """
-        Shift x elements of the beginning of the array
-        """
-        return array[:+key]
+        try:
+            while True:
+                self.buffer += self.ser.read(self.ser.inWaiting() or 1)  # read all char in buffer
+                while '\n' in self.buffer:  # split data line by line and store it in var
+                    var, self.buffer = self.buffer.split('\n', 1)  # this is called unpacking
+                    self.queue.put(var)  # put received line in the queue
+        except SystemExit:
+            self.close_serial_port()
 
     def get_queue(self):
         return self.queue
 
-    def count_queue(self):
-        return len(self.queueArray)
+    def close_serial_port(self):
+        #Open COM port
+        try:
+            self.ser.close()
+        except StandardError, e:
+            print e
+            print "Error closing serial connection %s. Exitting."
 
     def open_serial_port(self):
         #Open COM port
