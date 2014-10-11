@@ -32,7 +32,7 @@ class SerialParser(threading.Thread):
             try:
                 var = self.serialBuffer.queue.get(False)  # try to fetch a value from queue
             except Queue.Empty:
-                #time.sleep(0.1)
+                time.sleep(0.1)
                 pass  # if it is empty, do nothing
             else:
                 var_cpy = copy.deepcopy(var)
