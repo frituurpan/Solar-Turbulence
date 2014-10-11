@@ -39,7 +39,7 @@ class SerialParser(threading.Thread):
                 del var
                 self.queueArray.append(var_cpy)
                 for row in self.queueArray:
-                    if row == '!':
+                    if str.strip(row) == '!':
                         self.move_queue_to_transmissions()
                         self.notify_observers()
                         print len(self.get_completed_transmissions())
