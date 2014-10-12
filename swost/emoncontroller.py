@@ -58,7 +58,7 @@ class EmonController:
         if self.check_config():
             return False
 
-        gas_total = transmission.get_gas_m3()
+        gas_total = int(transmission.get_gas_m3())
         energy_total = transmission.get_total_kwh() * 1000
         current_watts = transmission.get_current_watts() * 1000
         if gas_total > 0 and energy_total > 0:
