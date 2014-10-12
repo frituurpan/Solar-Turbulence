@@ -35,7 +35,8 @@ class EmonController:
         else:
             node_id = 20
 
-        params = '[[4,' + str(node_id) + ',' + str(gas_total) + ',' + str(energy_total) + ',' + str(current_watts) + ']]'
+        params = '[[4,' + str(node_id) + ',' + str(gas_total) + ',' + str(energy_total) + ',' + str(
+            current_watts) + ']]'
         return params
 
     def build_url(self, pay_load):
@@ -54,6 +55,9 @@ class EmonController:
         :type transmission:TransmissionModel
         :return:
         """
+        if self.check_config():
+            return False
+
         gas_total = transmission.get_gas_m3()
         energy_total = transmission.get_total_kwh() * 1000
         current_watts = transmission.get_current_watts() * 1000
@@ -63,3 +67,8 @@ class EmonController:
             post_url = self.build_url(payload)
             print post_url
             self.post_url_func(post_url)
+
+    def check_config(self):
+        if 'API_KEY_HERE' in self.config.get_api_key():
+            return False
+        return True
