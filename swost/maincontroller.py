@@ -54,7 +54,6 @@ class MainController:
             self.emonController.post(transmission)
             serial_input.remove(transmission)
 
-
     def shutdown(self):
         self.get_serial_parser().get_serial_buffer().join()
         self.get_serial_parser().join()
