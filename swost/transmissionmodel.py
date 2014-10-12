@@ -26,8 +26,13 @@ class TransmissionModel:
         pass
 
     def get_current_watts(self):
-        return str.replace(str.replace(self.raw_data[18], '(', ''), ')', '')
-        pass
+        """
+        The current watts row has no key
+        :return:
+        """
+        val = self.get_next_row_by_key_of_previous_row('0-1:24.3.0')
+        val = str.replace(str.replace(val, '(', ''), ')', '')
+        return val
 
     def get_gas_m3(self):
         # line 18
@@ -37,6 +42,11 @@ class TransmissionModel:
         for line in self.raw_data:
             if key in line:
                 return line
+
+    def get_next_row_by_key_of_previous_row(self, key):
+        for (index, line) in enumerate(self.raw_data):
+            if key in line:
+                return self.raw_data[1 + index]
 
     @staticmethod
     def get_value_from_row(row):
