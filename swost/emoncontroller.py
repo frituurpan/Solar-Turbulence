@@ -58,9 +58,9 @@ class EmonController:
         # if self.check_config():
         #     return False
 
-        gas_total = int(transmission.get_gas_m3())
+        gas_total = int(transmission.get_gas_m3() * 1000)
         energy_total = int(transmission.get_total_kwh() * 1000)
-        current_watts = (transmission.get_current_watts() * 1000)
+        current_watts = int(transmission.get_current_watts() * 1000)
         if gas_total > 0 and energy_total > 0:
             payload = self.create_payload(gas_total, energy_total, current_watts)
 

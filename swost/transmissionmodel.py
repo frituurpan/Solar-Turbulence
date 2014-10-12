@@ -29,15 +29,14 @@ class TransmissionModel:
         The current watts row has no key
         :return:
         """
-        val = self.get_next_row_by_key_of_previous_row('0-1:24.3.0')
-        val = str.replace(str.replace(val, '(', ''), ')', '')
+        key = '1-0:1.7.0'
+        val = self.get_row_by_key(key)
+        val = str.replace(str.replace(val, key + '(', ''), '*kW)', '')
         return float(val)
 
     def get_gas_m3(self):
-        key = '0-1:24.3.0'
-        val = self.get_row_by_key(key)
-        val = str.replace(val, key + '(', '')
-        val = val[:6]
+        val = self.get_next_row_by_key_of_previous_row('0-1:24.3.0')
+        val = str.replace(str.replace(val, '(', ''), ')', '')
         return float(val)
 
     def get_row_by_key(self, key):
