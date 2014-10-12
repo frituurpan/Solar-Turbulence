@@ -19,7 +19,7 @@ config = SwostConfig(configFilePath)
 serialBuffer = SerialBuffer(config)
 serialParser = SerialParser(serialBuffer)
 
-emonController = EmonController()
+emonController = EmonController(config)
 
 mainController = MainController(serialParser, emonController)
 

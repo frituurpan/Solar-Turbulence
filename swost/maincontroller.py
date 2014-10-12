@@ -51,10 +51,13 @@ class MainController:
     def push_input(self):
         serial_input = self.serialParser.get_completed_transmissions()
         for transmission in serial_input:
-            print transmission.get_day_kwh()
-            print transmission.get_night_kwh()
+            print transmission.get_total_kwh()
+            print transmission.get_gas_m3()
             print transmission.get_current_watts()
-        #serial_result = self.emonController.post(serial_input)
+            serial_result = self.emonController.post(transmission)
+            if serial_result:
+                del transmission
+
 
     def shutdown(self):
         self.get_serial_parser().get_serial_buffer().join()
