@@ -28,6 +28,7 @@ class MainController:
         """
         self.serialParser = serial_parser
         self.emonController = emon_controller
+        self.get_serial_parser().register_observer(self)
 
     def start(self):
         #self.get_serial_parser().get_serial_buffer().daemon = True
@@ -49,8 +50,10 @@ class MainController:
 
     def push_input(self):
         serial_input = self.serialParser.get_completed_transmissions()
-        #print serial_input
-        #serial_input = self.emonController.prepare_data(serial_input)
+        for transmission in serial_input:
+            print transmission.get_day_kwh()
+            print transmission.get_night_kwh()
+            print transmission.get_current_watts()
         #serial_result = self.emonController.post(serial_input)
 
     def shutdown(self):

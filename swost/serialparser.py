@@ -2,6 +2,7 @@ import Queue
 import copy
 import threading
 import time
+from swost.transmissionmodel import TransmissionModel
 
 __author__ = 'frituurpan'
 
@@ -42,8 +43,6 @@ class SerialParser(threading.Thread):
                     if row == '!':
                         self.move_queue_to_transmissions()
                         self.notify_observers()
-                        print len(self.get_completed_transmissions())
-                        print self.get_completed_transmissions()
 
     def get_serial_buffer(self):
         """
@@ -54,7 +53,8 @@ class SerialParser(threading.Thread):
     def move_queue_to_transmissions(self):
         transmissions = self.get_transmissions()
         for transmission in transmissions:
-            self.completeTransmissions.append(transmission)
+            transmission_object = TransmissionModel(transmission)
+            self.completeTransmissions.append(transmission_object)
 
     def get_completed_transmissions(self):
         return self.completeTransmissions
