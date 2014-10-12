@@ -51,10 +51,7 @@ class MainController:
     def push_input(self):
         serial_input = self.serialParser.get_completed_transmissions()
         for transmission in serial_input:
-            print transmission.get_total_kwh()
-            print transmission.get_gas_m3()
-            print transmission.get_current_watts()
-            serial_result = self.emonController.post(transmission)
+            self.emonController.post(transmission)
             serial_input.remove(transmission)
 
 
