@@ -55,8 +55,7 @@ class MainController:
             print transmission.get_gas_m3()
             print transmission.get_current_watts()
             serial_result = self.emonController.post(transmission)
-            if serial_result:
-                del transmission
+            serial_input.remove(transmission)
 
 
     def shutdown(self):

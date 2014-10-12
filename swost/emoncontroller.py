@@ -70,5 +70,6 @@ class EmonController:
 
     def check_config(self):
         if 'API_KEY_HERE' in self.config.get_api_key():
-            return False
+            if self.is_debug() is False:
+                return False
         return True
