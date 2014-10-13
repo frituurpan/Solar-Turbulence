@@ -13,6 +13,7 @@ class EmonController:
     emonUrl = ""
     apiKey = ""
     config = ""
+    post_mode = '!timestamp'
 
     def __init__(self, config):
         """
@@ -35,7 +36,12 @@ class EmonController:
         else:
             node_id = 20
 
-        params = '[[0,' + str(node_id) + ',' + str(gas_total) + ',' + str(energy_total) + ',' + str(
+        if self.post_mode == 'timestamp':
+            offset = '0'
+        else:
+            offset = '4'
+
+        params = '[[' + offset + ',' + str(node_id) + ',' + str(gas_total) + ',' + str(energy_total) + ',' + str(
             current_watts) + ']]'
         return params
 
@@ -43,8 +49,10 @@ class EmonController:
         if unix_timestamp == '':
             raise Exception('No timestamp present')
 
-        url = str(self.emonUrl) + '?' + 'apikey=' + self.apiKey + '&data=' + str(pay_load) + '&time=' + str(
-            unix_timestamp)
+        url = str(self.emonUrl) + '?' + 'apikey=' + self.apiKey + '&data=' + str(pay_load)
+
+        if self.post_mode == 'timestamp':
+            url = url + '&time=' + str(unix_timestamp)
         return url
 
     @staticmethod
