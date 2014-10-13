@@ -1,4 +1,6 @@
 import Queue
+from requests import ConnectionError
+import time
 
 __author__ = 'frituurpan'
 
@@ -51,8 +53,12 @@ class MainController:
     def push_input(self):
         serial_input = self.serialParser.get_completed_transmissions()
         for transmission in serial_input:
-            self.emonController.post(transmission)
-            serial_input.remove(transmission)
+            try:
+                self.emonController.post(transmission)
+                serial_input.remove(transmission)
+            except ConnectionError:
+                print "connection timeout, sleeping"
+                time.sleep(10)
 
     def shutdown(self):
         self.get_serial_parser().get_serial_buffer().join()

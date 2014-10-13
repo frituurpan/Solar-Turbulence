@@ -1,4 +1,5 @@
 import ConfigParser
+import arrow
 
 __author__ = 'frituurpan'
 
@@ -39,3 +40,13 @@ class SwostConfig:
 
     def get_debug_port(self):
         return self.get_config().get(self.configBlockName, 'debug_port')
+
+    def get_timezone(self):
+        return self.get_config().get(self.configBlockName, 'timezone')
+
+    def get_current_timezone_stamp(self):
+        utc = arrow.utcnow()
+        local = utc.to(self.get_timezone())
+        locform = local.format('YYYY-MM-DD HH:mm:ss')
+        locutc = arrow.get(locform, 'YYYY-MM-DD HH:mm:ss')
+        return locutc.timestamp

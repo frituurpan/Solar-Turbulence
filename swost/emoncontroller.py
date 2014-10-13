@@ -35,12 +35,16 @@ class EmonController:
         else:
             node_id = 20
 
-        params = '[[4,' + str(node_id) + ',' + str(gas_total) + ',' + str(energy_total) + ',' + str(
+        params = '[[0,' + str(node_id) + ',' + str(gas_total) + ',' + str(energy_total) + ',' + str(
             current_watts) + ']]'
         return params
 
-    def build_url(self, pay_load):
-        url = str(self.emonUrl) + '?' + 'apikey=' + self.apiKey + '&data=' + str(pay_load)
+    def build_url(self, pay_load, unix_timestamp=''):
+        if unix_timestamp == '':
+            raise Exception('No timestamp present')
+
+        url = str(self.emonUrl) + '?' + 'apikey=' + self.apiKey + '&data=' + str(pay_load) + '&time=' + str(
+            unix_timestamp)
         return url
 
     @staticmethod
@@ -56,7 +60,7 @@ class EmonController:
         :return:
         """
         # if self.check_config():
-        #     return False
+        # return False
 
         gas_total = int(transmission.get_gas_m3() * 1000)
         energy_total = int(transmission.get_total_kwh() * 1000)
@@ -64,7 +68,7 @@ class EmonController:
         if gas_total > 0 and energy_total > 0:
             payload = self.create_payload(gas_total, energy_total, current_watts)
 
-            post_url = self.build_url(payload)
+            post_url = self.build_url(payload, transmission.get_timestamp())
             print post_url
             self.post_url_func(post_url)
 

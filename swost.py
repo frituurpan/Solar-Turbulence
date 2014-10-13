@@ -17,7 +17,7 @@ configFilePath = currentDir + r'/swost.conf'
 config = SwostConfig(configFilePath)
 
 serialBuffer = SerialBuffer(config)
-serialParser = SerialParser(serialBuffer)
+serialParser = SerialParser(serialBuffer, config)
 
 emonController = EmonController(config)
 

@@ -1,8 +1,11 @@
+import copy
+
 __author__ = 'Administrator'
 
 
 class TransmissionModel:
     raw_data = ''
+    timestamp = ''
 
     def __init__(self, data):
         self.raw_data = data
@@ -48,6 +51,12 @@ class TransmissionModel:
         for (index, line) in enumerate(self.raw_data):
             if key in line:
                 return self.raw_data[1 + index]
+
+    def set_timestamp(self, timestamp):
+        self.timestamp = copy.deepcopy(timestamp)
+
+    def get_timestamp(self):
+        return self.timestamp
 
     @staticmethod
     def get_value_from_row(row):

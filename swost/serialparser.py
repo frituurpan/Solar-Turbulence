@@ -24,9 +24,12 @@ class SerialParser(threading.Thread):
 
     observers = []
 
-    def __init__(self, serial_buffer):
+    config = ''
+
+    def __init__(self, serial_buffer, config):
         super(SerialParser, self).__init__()
         self.serialBuffer = serial_buffer
+        self.config = config
 
     def run(self):
         while True:
@@ -54,6 +57,7 @@ class SerialParser(threading.Thread):
         transmissions = self.get_transmissions()
         for transmission in transmissions:
             transmission_object = TransmissionModel(transmission)
+            transmission_object.set_timestamp(self.get_config().get_current_timezone_stamp())
             self.completeTransmissions.append(transmission_object)
 
     def get_completed_transmissions(self):
@@ -64,6 +68,12 @@ class SerialParser(threading.Thread):
         transmissions = [queue_array[:21]]
         del self.queueArray[:21]
         return transmissions
+
+    def get_config(self):
+        """
+        :rtype: SwostConfig
+        """
+        return self.config
 
     @staticmethod
     def shift(key, array):
