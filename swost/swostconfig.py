@@ -46,7 +46,6 @@ class SwostConfig:
 
     def get_current_timezone_stamp(self):
         utc = arrow.utcnow()
-        return utc.timestamp
         local = utc.to(self.get_timezone())
         locform = local.format('YYYY-MM-DD HH:mm:ss')
         locutc = arrow.get(locform, 'YYYY-MM-DD HH:mm:ss')
