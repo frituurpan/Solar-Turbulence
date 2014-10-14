@@ -12,6 +12,7 @@ class SwostConfig:
 
     configParser = -1
     configBlockName = 'config'
+    dbConfigBlockName = 'database'
 
     def __init__(self, config_file_path):
         config_parser = ConfigParser.RawConfigParser()
@@ -50,3 +51,18 @@ class SwostConfig:
         locform = local.format('YYYY-MM-DD HH:mm:ss')
         locutc = arrow.get(locform, 'YYYY-MM-DD HH:mm:ss')
         return locutc.timestamp
+
+    def get_db_host(self):
+        return self.get_config().get(self.dbConfigBlockName, 'host')
+
+    def get_db_type(self):
+        return self.get_config().get(self.dbConfigBlockName, 'type')
+
+    def get_db_user(self):
+        return self.get_config().get(self.dbConfigBlockName, 'user')
+
+    def get_db_password(self):
+        return self.get_config().get(self.dbConfigBlockName, 'password')
+
+    def get_db_database(self):
+        return self.get_config().get(self.dbConfigBlockName, 'database')

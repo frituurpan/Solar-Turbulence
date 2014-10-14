@@ -21,7 +21,7 @@ serialParser = SerialParser(serialBuffer, config)
 
 emonController = EmonController(config)
 
-mainController = MainController(serialParser, emonController)
+mainController = MainController(serialParser, emonController, config)
 
 try:
     mainController.start()
