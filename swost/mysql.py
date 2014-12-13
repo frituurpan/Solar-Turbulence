@@ -45,7 +45,7 @@ class MySQL:
             utc = arrow.utcnow()
             utc.to('Europe/Amsterdam')
             stamp = utc.format('YYYY-MM-DD HH:mm:ss')
-            self.x.execute("""INSERT INTO """ + self.table + """ VALUES (%s,%s,%s,%s,%s,%s)""",
+            self.x.execute("""INSERT INTO """ + self.table + """(`time`, `offset`, `node`, `value1`, `value2`, `value3`) VALUES (%s,%s,%s,%s,%s,%s)""",
                            (stamp, offset, node, value1, value2, value3))
             self.conn.commit()
         except StandardError, e:
