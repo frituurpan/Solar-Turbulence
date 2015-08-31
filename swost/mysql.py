@@ -26,10 +26,10 @@ class MySQL:
         self.connect(self.config)
 
     def connect(self, config):
-        conn = MySQLdb.connect(host=config.host,
-                               user=config.user,
-                               passwd=config.password,
-                               db=config.database)
+        conn = MySQLdb.connect(host=config['host'],
+                               user=config['user'],
+                               passwd=config['password'],
+                               db=config['database'])
 
         x = conn.cursor()
         self.conn = conn
