@@ -10,14 +10,27 @@ class MySQL:
     x = ''
     table = 'log'
 
+    config = {}
+
     createTable = "CREATE TABLE `log` (`time` timestamp DEFAULT CURRENT_TIMESTAMP,`offset` tinyint(1) unsigned DEFAULT NULL,`node` smallint(2) unsigned DEFAULT NULL,`value1` int(10) unsigned DEFAULT NULL,`value2` int(10) unsigned DEFAULT NULL,`value3` int(10) unsigned DEFAULT NULL) ENGINE=InnoDB DEFAULT CHARSET=latin1;"
 
     def open(self, host, user, password, database):
 
-        conn = MySQLdb.connect(host=host,
-                               user=user,
-                               passwd=password,
-                               db=database)
+        self.config = {
+            'host': host,
+            'user': user,
+            'passwd' : password,
+            'db' : database
+        }
+
+        self.connect(self.config)
+
+    def connect(self, config):
+        conn = MySQLdb.connect(host=config.host,
+                               user=config.user,
+                               passwd=config.password,
+                               db=config.database)
+
         x = conn.cursor()
         self.conn = conn
         self.x = x
@@ -48,6 +61,8 @@ class MySQL:
             self.x.execute("""INSERT INTO """ + self.table + """(`time`, `offset`, `node`, `value1`, `value2`, `value3`) VALUES (%s,%s,%s,%s,%s,%s)""",
                            (stamp, offset, node, value1, value2, value3))
             self.conn.commit()
+        except (AttributeError, MySQLdb.OperationalError):
+            self.connect(self.config)
         except StandardError, e:
             print e
             self.conn.rollback()
