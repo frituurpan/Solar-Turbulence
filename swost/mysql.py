@@ -28,8 +28,8 @@ class MySQL:
     def connect(self, config):
         conn = MySQLdb.connect(host=config['host'],
                                user=config['user'],
-                               passwd=config['password'],
-                               db=config['database'])
+                               passwd=config['passwd'],
+                               db=config['db'])
 
         x = conn.cursor()
         self.conn = conn
