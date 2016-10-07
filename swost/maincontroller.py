@@ -64,6 +64,12 @@ class MainController:
                     try:
                         self.get_db().log(4, 16, transmission.get_total_kwh(), transmission.get_gas_m3(),
                                         transmission.get_current_watts())
+                        self.get_db().logRaw(
+                            transmission.get_day_kwh(),
+                            transmission.get_night_kwh(),
+                            transmission.get_current_watts(),
+                            transmission.get_gas_m3()
+                        )
                     except StandardError, e:
                         print e
             except ConnectionError:
