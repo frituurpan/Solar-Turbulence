@@ -72,16 +72,12 @@ class MySQL:
 
 
     def logRaw(self, el_normal, el_low, el_usage, gas):
-        el_normal = el_normal
-        el_low = el_low
-        el_usage = el_usage
-        gas = gas
 
         try:
             utc = arrow.utcnow()
             utc.to('Europe/Amsterdam')
             stamp = utc.format('YYYY-MM-DD HH:mm:ss')
-            self.x.execute("""INSERT INTO """ + self.usageTable + """(`time`, `el_normal`, `el_low`, `el_usage`, `gas`) VALUES (%s,%s,%s,%s,%s)""",
+            self.x.execute("""INSERT INTO `""" + self.usageTable + """` (`time`, `el_normal`, `el_low`, `el_usage`, `gas`) VALUES (%s,%s,%s,%s,%s)""",
                            (stamp, el_normal, el_low, el_usage, gas))
             self.conn.commit()
         except (AttributeError, MySQLdb.OperationalError):
