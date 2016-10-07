@@ -72,7 +72,10 @@ class MySQL:
 
 
     def logRaw(self, el_normal, el_low, el_usage, gas):
-
+        el_normal = el_normal * 1000
+        el_low = el_low * 1000
+        el_usage = el_usage * 1000
+        gas = gas * 1000
         try:
             utc = arrow.utcnow()
             utc.to('Europe/Amsterdam')
