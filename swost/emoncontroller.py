@@ -7,6 +7,7 @@ Receives data array and posts it to emoncms
 import requests
 
 
+
 class EmonController:
     debug = False
 
@@ -67,6 +68,10 @@ class EmonController:
         :type transmission:TransmissionModel
         :return:
         """
+
+        data = 'EMON,NODE=gas value=' + str(transmission.get_gas_m3() * 1000) + '\nEMON,NODE=current value=' + str(transmission.get_current_watts() * 1000) + '\nEMON,NODE=high value=' + str(transmission.get_day_kwh() * 1000) + '\nEMON,NODE=low value=' + str(transmission.get_night_kwh() * 1000) + ''
+        response = requests.post('http://192.168.11.23:8086/write?db=data', data=data)
+
         # if self.check_config():
         # return False
 
